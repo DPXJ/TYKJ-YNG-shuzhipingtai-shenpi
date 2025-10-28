@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数智平台与云农谷业务互通原型演示</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Web端主界面 -->
+        <div id="web-app" class="web-app">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="platform-name">数智平台与云农谷审批融合、数据同步</div>
+                    <div class="platform-subtitle">相关原型设计</div>
+                </div>
+                <div class="header-right">
+                    <div class="header-icons">
+                        <div class="demo-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>原型演示</span>
+                        </div>
+                        <div class="user-info">
+                            <div class="avatar-icon"><i class="fas fa-user"></i></div>
+                            <span>张三</span>
+                        </div>
+                        <i class="fas fa-refresh" onclick="location.reload()"></i>
+                        <i class="fas fa-expand" onclick="toggleFullscreen()"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-content">
+                <!-- 左侧产品形态导航菜单 -->
+                <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <!-- 产品形态1：数智平台 -->
+                        <div class="product-card" onclick="toggleProductMenu('shuzhi')">
+                            <div class="product-card-header">
+                                <div class="product-icon">
+                                    <i class="fas fa-desktop"></i>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">数智平台</div>
+                                    <div class="product-subtitle">PC端管理系统</div>
+                                </div>
+                                <div class="product-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="product-submenu" id="shuzhi-submenu">
+                                <div class="submenu-item" onclick="showPage('procurement', event)">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span>云农谷采购申请</span>
+                                </div>
+                                <div class="submenu-item" onclick="showPage('payment', event)">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>请款申请</span>
+                                </div>
+                                <div class="submenu-item active" onclick="showPage('approval', event)">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>审批</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品形态2：云农谷APP -->
+                        <div class="product-card" onclick="toggleProductMenu('yunnonggu')">
+                            <div class="product-card-header">
+                                <div class="product-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">云农谷APP</div>
+                                    <div class="product-subtitle">移动端应用</div>
+                                </div>
+                                <div class="product-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="product-submenu" id="yunnonggu-submenu">
+                                <div class="submenu-item" onclick="showPage('input-approval', event)">
+                                    <i class="fas fa-seedling"></i>
+                                    <span>投入品申请</span>
+                                </div>
+                                <div class="submenu-item" onclick="showPage('work-approval', event)">
+                                    <i class="fas fa-users"></i>
+                                    <span>临时用工申请</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品形态3：企业微信 -->
+                        <div class="product-card" onclick="toggleProductMenu('wechat')">
+                            <div class="product-card-header">
+                                <div class="product-icon">
+                                    <i class="fab fa-weixin"></i>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">企业微信</div>
+                                    <div class="product-subtitle">移动审批</div>
+                                </div>
+                                <div class="product-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="product-submenu" id="wechat-submenu">
+                                <div class="submenu-item" onclick="showPage('wechat-approval', event)">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>审批中心</span>
+                                </div>
+                                <div class="submenu-item" onclick="showPage('wechat-notification', event)">
+                                    <i class="fas fa-bell"></i>
+                                    <span>消息通知</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品形态4：小程序 -->
+                        <div class="product-card" onclick="toggleProductMenu('miniprogram')">
+                            <div class="product-card-header">
+                                <div class="product-icon">
+                                    <i class="fas fa-cube"></i>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">小程序</div>
+                                    <div class="product-subtitle">轻量级应用</div>
+                                </div>
+                                <div class="product-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="product-submenu" id="miniprogram-submenu">
+                                <div class="submenu-item" onclick="showPage('miniprogram-demo', event)">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>移动端演示</span>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </aside>
+
+                <!-- 主内容区域 -->
+                <main class="content-area">
+                    <!-- OA审批页面 -->
+                    <div id="oa-approval-page" class="page-content">
+                        <div class="page-header">
+                            <h1>OA审批</h1>
+                            <div class="page-tabs">
+                                <div class="tab active">首页</div>
+                                <div class="tab">审批中心</div>
+                            </div>
+                        </div>
+
+                        <div class="approval-center">
+                            <h2>审批中心</h2>
+                            <div class="approval-cards">
+                                <div class="approval-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-number">0</div>
+                                        <div class="card-title">待处理</div>
+                                    </div>
+                                </div>
+                                <div class="approval-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-title">已处理</div>
+                                    </div>
+                                </div>
+                                <div class="approval-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-title">已发起</div>
+                                    </div>
+                                </div>
+                                <div class="approval-card">
+                                    <div class="card-icon">
+                                        <i class="fas fa-share"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-title">抄送我的</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scenarios-section">
+                            <h2>场景</h2>
+                            <div class="scenario-buttons">
+                                <button class="scenario-btn">交付中心</button>
+                                <button class="scenario-btn">采购中心</button>
+                                <button class="scenario-btn">业务管理</button>
+                                <button class="scenario-btn">智能财务</button>
+                            </div>
+                        </div>
+
+                        <div class="all-approvals">
+                            <h2>全部审批</h2>
+                            
+                            <div class="approval-category">
+                                <h3>常用</h3>
+                                <div class="approval-items">
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>工作请示</span>
+                                    </div>
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>预算申请</span>
+                                    </div>
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>用印申请</span>
+                                    </div>
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>日常采购</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="approval-category">
+                                <h3>营销中心</h3>
+                                <div class="approval-items">
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>招投标</span>
+                                    </div>
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>售前任务</span>
+                                    </div>
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>开票申请</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="approval-category">
+                                <h3>采购中心</h3>
+                                <div class="approval-items">
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>付款申请</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="approval-category">
+                                <h3>交付中心</h3>
+                                <div class="approval-items">
+                                    <div class="approval-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>项目验收</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 云农谷卡片 - 新增 -->
+                            <div class="approval-category yunnonggu-category">
+                                <h3>云农谷</h3>
+                                <div class="approval-items">
+                                    <div class="approval-item yunnonggu-item" onclick="showMobileApp('temporary-work')">
+                                        <i class="fas fa-users"></i>
+                                        <span>临时用工申请</span>
+                                    </div>
+                                    <div class="approval-item yunnonggu-item" onclick="showMobileApp('input-application')">
+                                        <i class="fas fa-seedling"></i>
+                                        <span>投入品申请</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- 移动端小程序模拟器 -->
+        <div id="mobile-app" class="mobile-app hidden">
+            <div class="phone-frame">
+                <div class="phone-screen">
+                    <div class="mobile-header">
+                        <div class="mobile-title">数智平台</div>
+                        <div class="mobile-user">
+                            <img src="https://via.placeholder.com/24x24/4A90E2/FFFFFF?text=王" alt="用户头像">
+                            <span>王成龙</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-content">
+                        <div class="mobile-nav">
+                            <div class="mobile-nav-item active">审批</div>
+                            <div class="mobile-nav-item">消息</div>
+                            <div class="mobile-nav-item">我的</div>
+                        </div>
+                        
+                        <div class="mobile-approval-list">
+                            <div class="mobile-approval-item">
+                                <div class="approval-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="approval-info">
+                                    <div class="approval-title">投入品申请 (来自云农谷)</div>
+                                    <div class="approval-subtitle">申请人：双坤</div>
+                                    <div class="approval-time">2025-10-27 14:30</div>
+                                </div>
+                                <div class="approval-status pending">待处理</div>
+                            </div>
+                            
+                            <div class="mobile-approval-item">
+                                <div class="approval-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="approval-info">
+                                    <div class="approval-title">临时用工申请 (来自云农谷)</div>
+                                    <div class="approval-subtitle">申请人：双坤</div>
+                                    <div class="approval-time">2025-10-27 14:25</div>
+                                </div>
+                                <div class="approval-status pending">待处理</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="close-mobile" onclick="hideMobileApp()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
