@@ -387,6 +387,87 @@ body {
     transform: scale(1.1);
 }
 
+/* 有子菜单的菜单项 */
+.submenu-item.has-children {
+    position: relative;
+}
+
+.submenu-arrow {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.submenu-item.has-children.expanded .submenu-arrow {
+    transform: rotate(180deg);
+}
+
+/* 三级子菜单 */
+.sub-submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.sub-submenu.expanded {
+    max-height: 200px;
+}
+
+.sub-submenu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px 12px 80px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.sub-submenu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sub-submenu-item:hover {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.08) 100%);
+    color: #667eea;
+    transform: translateX(4px);
+}
+
+.sub-submenu-item.active {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.18) 0%, rgba(118, 75, 162, 0.12) 100%);
+    color: #667eea;
+    font-weight: 600;
+    border-left-color: #667eea;
+}
+
+.sub-submenu-item.active::before {
+    opacity: 1;
+}
+
+.sub-submenu-item i {
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.sub-submenu-item:hover i {
+    transform: scale(1.1);
+}
+
 /* 折叠状态下的样式 */
 .sidebar.collapsed .product-card {
     margin-bottom: 12px;
@@ -1659,6 +1740,529 @@ body {
     color: #1890ff;
 }
 
+/* 审批详情页面样式 */
+.approval-detail-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.detail-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 24px 30px;
+}
+
+.detail-header h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.detail-status {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.detail-body {
+    padding: 30px;
+}
+
+.detail-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-section h3 i {
+    color: #1890ff;
+    font-size: 18px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.detail-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* 种植计划详情卡片 */
+.planting-detail-card {
+    background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
+    border: 2px solid #91d5ff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.planting-detail-header {
+    background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+    color: white;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.planting-detail-body {
+    padding: 20px;
+    background: white;
+}
+
+.planting-info {
+    margin-bottom: 20px;
+}
+
+.planting-name {
+    font-size: 15px;
+    color: #0050b3;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.farming-activities-detail {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.farming-activities-detail h4 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.activity-item:last-child {
+    margin-bottom: 0;
+}
+
+.activity-item:hover {
+    background: #f0f9ff;
+    border-color: #91d5ff;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+}
+
+.activity-arrow {
+    margin-left: auto;
+    color: #bfbfbf;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.activity-item:hover .activity-arrow {
+    color: #1890ff;
+    transform: translateX(4px);
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+}
+
+.activity-info {
+    flex: 1;
+}
+
+.activity-title {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.activity-meta {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 采购明细表格样式 */
+.purchase-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.purchase-detail-table th,
+.purchase-detail-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.purchase-detail-table th {
+    background: #fafafa;
+    color: #666;
+    font-weight: 600;
+}
+
+.purchase-detail-table td {
+    color: #333;
+}
+
+.purchase-detail-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* 审批流程时间轴 */
+.approval-timeline {
+    padding-left: 0;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 36px;
+    bottom: 0;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-icon {
+    width: 32px;
+    height: 32px;
+    background: #1890ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.timeline-icon.success {
+    background: #52c41a;
+}
+
+.timeline-icon.pending {
+    background: #faad14;
+}
+
+.timeline-content {
+    flex: 1;
+    padding-top: 4px;
+}
+
+.timeline-title {
+    font-size: 15px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.timeline-desc {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.timeline-time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 农事活动详情弹窗样式 */
+.activity-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.activity-modal-overlay.show {
+    opacity: 1;
+}
+
+.activity-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.activity-modal-overlay.show .activity-modal {
+    transform: translateY(0);
+}
+
+.activity-modal-header {
+    background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.activity-modal-header h2 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.modal-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.activity-modal-body {
+    padding: 24px 30px;
+    max-height: calc(90vh - 80px);
+    overflow-y: auto;
+}
+
+/* 状态徽章 */
+.activity-status-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.status-completed {
+    background: #f6ffed;
+    color: #52c41a;
+    border: 1px solid #b7eb8f;
+}
+
+.status-in-progress {
+    background: #fff7e6;
+    color: #fa8c16;
+    border: 1px solid #ffd591;
+}
+
+.status-pending {
+    background: #f0f0f0;
+    color: #8c8c8c;
+    border: 1px solid #d9d9d9;
+}
+
+/* 详情区块 */
+.activity-detail-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.activity-detail-section .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activity-detail-section .section-title i {
+    color: #52c41a;
+    font-size: 18px;
+}
+
+/* 详情项 */
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.activity-detail-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.activity-detail-section:first-of-type,
+.activity-detail-section:nth-of-type(2) {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.detail-item.full-width {
+    flex: 1 1 100%;
+}
+
+.detail-item-label {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.detail-item-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* 农事照片 */
+.activity-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.activity-photo {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activity-photo img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-time {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.no-photos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: #bfbfbf;
+}
+
+.no-photos i {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.no-photos p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* 活动描述 */
+.activity-description {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #666;
+    padding: 16px;
+    background: white;
+    border-radius: 6px;
+    margin-top: 12px;
+    border-left: 4px solid #52c41a;
+}
+
 /* 响应式设计更新 */
 @media (max-width: 768px) {
     .approval-flow {
@@ -1703,5 +2307,26 @@ body {
     
     .plan-card-body {
         padding: 16px;
+    }
+    
+    .activity-modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .activity-modal-header {
+        padding: 16px 20px;
+    }
+    
+    .activity-modal-body {
+        padding: 16px 20px;
+    }
+    
+    .activity-photos {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-item {
+        min-width: 100%;
     }
 }

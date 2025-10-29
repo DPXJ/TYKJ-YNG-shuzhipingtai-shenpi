@@ -95,11 +95,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // 为导航项添加工具提示
     addTooltips();
     
-    // 自动展开数智平台菜单并显示审批页面
+    // 自动展开数智平台菜单和审批子菜单，并显示审批页面
     const shuzhiCard = document.querySelector('.product-card');
     if (shuzhiCard) {
         shuzhiCard.classList.add('expanded');
     }
+    
+    // 自动展开审批子菜单
+    const approvalSubmenu = document.getElementById('approval-submenu');
+    const approvalMenuItem = document.querySelector('.submenu-item.has-children');
+    if (approvalSubmenu && approvalMenuItem) {
+        approvalSubmenu.classList.add('expanded');
+        approvalMenuItem.classList.add('expanded');
+    }
+    
     showApprovalPage();
 });
 
@@ -244,16 +253,47 @@ function toggleProductMenu(productType) {
     card.classList.toggle('expanded');
 }
 
+// 三级菜单展开/收起功能
+function toggleSubSubmenu(submenuId, event) {
+    event.stopPropagation();
+    
+    const submenu = document.getElementById(submenuId);
+    const menuItem = event.target.closest('.submenu-item');
+    
+    // 切换展开状态
+    menuItem.classList.toggle('expanded');
+    submenu.classList.toggle('expanded');
+}
+
 // 页面切换功能
 function showPage(pageType, event) {
     event.stopPropagation(); // 阻止事件冒泡，防止触发父级 product-card 的点击事件
     
     // 移除所有子菜单项的active状态
     const submenuItems = document.querySelectorAll('.submenu-item');
-    submenuItems.forEach(item => item.classList.remove('active'));
+    submenuItems.forEach(item => {
+        if (!item.classList.contains('has-children')) {
+            item.classList.remove('active');
+        }
+    });
+    
+    // 移除所有三级菜单项的active状态
+    const subSubmenuItems = document.querySelectorAll('.sub-submenu-item');
+    subSubmenuItems.forEach(item => item.classList.remove('active'));
     
     // 添加当前点击项的active状态
-    event.target.closest('.submenu-item').classList.add('active');
+    const clickedItem = event.target.closest('.submenu-item, .sub-submenu-item');
+    if (clickedItem) {
+        clickedItem.classList.add('active');
+        
+        // 如果是三级菜单项，确保父级菜单保持展开状态
+        if (clickedItem.classList.contains('sub-submenu-item')) {
+            const parentSubmenu = clickedItem.closest('.submenu-item.has-children');
+            if (parentSubmenu) {
+                parentSubmenu.classList.add('active');
+            }
+        }
+    }
     
     // 根据页面类型显示不同内容
     switch(pageType) {
@@ -265,6 +305,9 @@ function showPage(pageType, event) {
             break;
         case 'approval':
             showApprovalPage();
+            break;
+        case 'approval-detail':
+            showApprovalDetailPage();
             break;
         case 'input-approval':
             showInputApprovalPage();
@@ -284,6 +327,309 @@ function showPage(pageType, event) {
         default:
             showDefaultPage();
     }
+}
+
+// 显示审批详情页面（模拟数据回显）
+function showApprovalDetailPage() {
+    const contentArea = document.querySelector('.content-area');
+    contentArea.innerHTML = `
+        <div class="page-content">
+            <div class="page-header">
+                <h1>审批详情</h1>
+                <p class="page-subtitle">查看审批单据的完整信息</p>
+            </div>
+
+            <div class="approval-detail-container">
+                <div class="detail-header">
+                    <h2>云农谷 · 柘城示范基地项目 - 采购申请</h2>
+                    <div class="detail-status">
+                        <i class="fas fa-check-circle"></i> 审批通过
+                    </div>
+                </div>
+
+                <div class="detail-body">
+                    <!-- 基本信息 -->
+                    <div class="detail-section">
+                        <h3>
+                            <i class="fas fa-info-circle"></i>
+                            基本信息
+                        </h3>
+                        <div class="detail-row">
+                            <div class="detail-field">
+                                <div class="detail-label">项目名称</div>
+                                <div class="detail-value">云农谷 · 柘城示范基地项目</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="detail-label">销售合同名称</div>
+                                <div class="detail-value">柘城基地农业技术服务合同-2025</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-field">
+                                <div class="detail-label">申请人</div>
+                                <div class="detail-value">张三</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="detail-label">申请部门</div>
+                                <div class="detail-value">市场与设计部</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="detail-label">采购类型</div>
+                                <div class="detail-value">物资</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="detail-label">联系人</div>
+                                <div class="detail-value">王成龙</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-field">
+                                <div class="detail-label">申请时间</div>
+                                <div class="detail-value">2025-10-28 14:30:00</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="detail-label">审批编号</div>
+                                <div class="detail-value">SPCG-2025102800123</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-field" style="grid-column: 1 / -1;">
+                                <div class="detail-label">情况说明（用途）</div>
+                                <div class="detail-value">
+                                    根据柘城示范基地2025年春季小麦和玉米种植计划，需要采购化肥、农药等农资物品，
+                                    用于"小麦-播种期施肥"和"玉米-中期追肥"等农事活动。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 种植计划与农事活动关联（模拟数据回显） -->
+                    <div class="detail-section">
+                        <h3>
+                            <i class="fas fa-seedling"></i>
+                            种植计划与农事活动关联
+                            <span class="section-badge">云农谷专用</span>
+                        </h3>
+
+                        <!-- 种植计划 1 -->
+                        <div class="planting-detail-card">
+                            <div class="planting-detail-header">
+                                <i class="fas fa-leaf"></i>
+                                种植计划 1
+                            </div>
+                            <div class="planting-detail-body">
+                                <div class="planting-info">
+                                    <div class="planting-name">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        柘城基地-小麦种植计划-2025春季
+                                    </div>
+                                </div>
+                                <div class="farming-activities-detail">
+                                    <h4>
+                                        <i class="fas fa-tasks"></i>
+                                        关联的农事活动（3项）
+                                    </h4>
+                                    <div class="activity-item" onclick="showActivityDetail('act1-1')">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">小麦-整地施基肥</div>
+                                            <div class="activity-meta">计划日期：2025-03-01 | 状态：已完成</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right activity-arrow"></i>
+                                    </div>
+                                    <div class="activity-item" onclick="showActivityDetail('act1-2')">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">小麦-播种</div>
+                                            <div class="activity-meta">计划日期：2025-03-10 | 状态：已完成</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right activity-arrow"></i>
+                                    </div>
+                                    <div class="activity-item" onclick="showActivityDetail('act1-3')">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-spinner"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">小麦-苗期追肥</div>
+                                            <div class="activity-meta">计划日期：2025-04-05 | 状态：进行中</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right activity-arrow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 种植计划 2 -->
+                        <div class="planting-detail-card">
+                            <div class="planting-detail-header">
+                                <i class="fas fa-leaf"></i>
+                                种植计划 2
+                            </div>
+                            <div class="planting-detail-body">
+                                <div class="planting-info">
+                                    <div class="planting-name">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        柘城基地-玉米种植计划-2025夏季
+                                    </div>
+                                </div>
+                                <div class="farming-activities-detail">
+                                    <h4>
+                                        <i class="fas fa-tasks"></i>
+                                        关联的农事活动（2项）
+                                    </h4>
+                                    <div class="activity-item" onclick="showActivityDetail('act2-1')">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">玉米-整地翻耕</div>
+                                            <div class="activity-meta">计划日期：2025-06-01 | 状态：待开始</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right activity-arrow"></i>
+                                    </div>
+                                    <div class="activity-item" onclick="showActivityDetail('act2-3')">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="activity-title">玉米-中期追肥</div>
+                                            <div class="activity-meta">计划日期：2025-07-15 | 状态：待开始</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right activity-arrow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 采购明细 -->
+                    <div class="detail-section">
+                        <h3>
+                            <i class="fas fa-shopping-cart"></i>
+                            采购明细
+                        </h3>
+                        <table class="purchase-detail-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>物品名称</th>
+                                    <th>规格型号</th>
+                                    <th>数量</th>
+                                    <th>单价(元)</th>
+                                    <th>小计(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>复合肥（氮磷钾）</td>
+                                    <td>50kg/袋，15-15-15</td>
+                                    <td>200</td>
+                                    <td>150.00</td>
+                                    <td>30,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>尿素</td>
+                                    <td>50kg/袋，含氮≥46%</td>
+                                    <td>100</td>
+                                    <td>120.00</td>
+                                    <td>12,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>除草剂</td>
+                                    <td>1L/瓶，草甘膦</td>
+                                    <td>50</td>
+                                    <td>45.00</td>
+                                    <td>2,250.00</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>杀虫剂</td>
+                                    <td>500ml/瓶，吡虫啉</td>
+                                    <td>30</td>
+                                    <td>65.00</td>
+                                    <td>1,950.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right; font-weight: 600;">合计金额：</td>
+                                    <td style="color: #ff4d4f; font-weight: 600; font-size: 15px;">46,200.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 审批流程 -->
+                    <div class="detail-section">
+                        <h3>
+                            <i class="fas fa-route"></i>
+                            审批流程
+                        </h3>
+                        <div class="approval-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-icon success">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">张三 发起申请</div>
+                                    <div class="timeline-desc">提交了采购申请单</div>
+                                    <div class="timeline-time">2025-10-28 14:30:00</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-icon success">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">王成龙（部门主管）审批通过</div>
+                                    <div class="timeline-desc">审批意见：同意采购，物资规格和数量合理</div>
+                                    <div class="timeline-time">2025-10-28 15:45:00</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-icon success">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">李明（财务经理）审批通过</div>
+                                    <div class="timeline-desc">审批意见：预算范围内，同意支付</div>
+                                    <div class="timeline-time">2025-10-28 16:20:00</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-icon success">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">高总（总经理）审批通过</div>
+                                    <div class="timeline-desc">审批意见：批准采购，注意采购质量和时效性</div>
+                                    <div class="timeline-time">2025-10-29 09:15:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="form-actions" style="justify-content: flex-end; border-top: 1px solid #f0f0f0; padding-top: 20px;">
+                        <button class="btn btn-secondary" onclick="showApprovalPage()">
+                            <i class="fas fa-arrow-left"></i> 返回列表
+                        </button>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print"></i> 打印
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 // 显示数智平台审批页面（原有的OA审批页面）
@@ -821,7 +1167,252 @@ const farmingActivitiesData = {
     ]
 };
 
+// 农事活动详细信息数据（模拟数据）
+const activityDetailsData = {
+    'act1-1': {
+        name: '小麦-整地施基肥',
+        planTime: '2025-03-01 至 2025-03-01',
+        status: '已完成',
+        statusClass: 'completed',
+        base: '柘城基地（1号地块）',
+        plan: '柘城基地-小麦种植计划-2025春季',
+        responsible: '张三',
+        startTime: '2025-03-01 08:00',
+        endTime: '2025-03-01 18:00',
+        note: '使用复合肥（15-15-15），每亩施肥40公斤',
+        source: '自行添加',
+        creator: '张三',
+        createTime: '2025-02-25 14:30',
+        images: [
+            { url: 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=整地施肥1', time: '2025-03-01 09:15' },
+            { url: 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=整地施肥2', time: '2025-03-01 14:30' }
+        ],
+        description: '对1号地块进行深耕翻地，深度25-30cm，同时均匀施入基肥。注意避开雨天作业，确保土壤墒情适宜。'
+    },
+    'act1-2': {
+        name: '小麦-播种',
+        planTime: '2025-03-10 至 2025-03-10',
+        status: '已完成',
+        statusClass: 'completed',
+        base: '柘城基地（1号地块）',
+        plan: '柘城基地-小麦种植计划-2025春季',
+        responsible: '李四',
+        startTime: '2025-03-10 07:00',
+        endTime: '2025-03-10 17:30',
+        note: '使用郑麦366品种，播种量22kg/亩',
+        source: '自行添加',
+        creator: '张三',
+        createTime: '2025-03-01 10:00',
+        images: [
+            { url: 'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=播种作业1', time: '2025-03-10 10:20' },
+            { url: 'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=播种作业2', time: '2025-03-10 15:45' }
+        ],
+        description: '采用机械条播方式，行距20cm，播深3-5cm。播后及时镇压，确保种子与土壤紧密接触。'
+    },
+    'act1-3': {
+        name: '小麦-苗期追肥',
+        planTime: '2025-04-05 至 2025-04-05',
+        status: '进行中',
+        statusClass: 'in-progress',
+        base: '柘城基地（1号地块）',
+        plan: '柘城基地-小麦种植计划-2025春季',
+        responsible: '王五',
+        startTime: '2025-04-05 08:00',
+        endTime: '2025-04-05 16:00',
+        note: '使用尿素，每亩施用15公斤',
+        source: '自行添加',
+        creator: '张三',
+        createTime: '2025-03-15 09:20',
+        images: [],
+        description: '小麦进入返青拔节期，需要追施氮肥促进分蘖和茎秆生长。选择晴天进行，追肥后适当浇水。'
+    },
+    'act2-1': {
+        name: '玉米-整地翻耕',
+        planTime: '2025-06-01 至 2025-06-01',
+        status: '待开始',
+        statusClass: 'pending',
+        base: '柘城基地（2号地块）',
+        plan: '柘城基地-玉米种植计划-2025夏季',
+        responsible: '赵六',
+        startTime: '2025-06-01 07:00',
+        endTime: '2025-06-01 18:00',
+        note: '前茬作物为小麦，需彻底清理秸秆',
+        source: '自行添加',
+        creator: '张三',
+        createTime: '2025-05-10 11:30',
+        images: [],
+        description: '对2号地块进行深松整地，打破犁底层，改善土壤结构。结合整地施入有机肥和复合肥。'
+    },
+    'act2-3': {
+        name: '玉米-中期追肥',
+        planTime: '2025-07-15 至 2025-07-15',
+        status: '待开始',
+        statusClass: 'pending',
+        base: '柘城基地（2号地块）',
+        plan: '柘城基地-玉米种植计划-2025夏季',
+        responsible: '孙七',
+        startTime: '2025-07-15 08:00',
+        endTime: '2025-07-15 17:00',
+        note: '大喇叭口期追肥，促进穗部发育',
+        source: '自行添加',
+        creator: '张三',
+        createTime: '2025-06-20 14:00',
+        images: [],
+        description: '玉米进入大喇叭口期，是需肥高峰期。追施尿素25kg/亩，可采用沟施或穴施方式，追肥后浇水。'
+    }
+};
+
 let plantingPlanCount = 0;
+
+// 显示农事活动详情弹窗
+function showActivityDetail(activityId) {
+    const activity = activityDetailsData[activityId];
+    if (!activity) {
+        console.error('农事活动数据不存在:', activityId);
+        return;
+    }
+
+    // 状态样式映射
+    const statusStyles = {
+        'completed': { class: 'status-completed', text: '已完成' },
+        'in-progress': { class: 'status-in-progress', text: '进行中' },
+        'pending': { class: 'status-pending', text: '待开始' }
+    };
+
+    const statusStyle = statusStyles[activity.statusClass] || statusStyles['pending'];
+
+    // 生成照片HTML
+    const imagesHtml = activity.images.length > 0 
+        ? activity.images.map((img, index) => `
+            <div class="activity-photo">
+                <img src="${img.url}" alt="农事照片${index + 1}">
+                <div class="photo-time">${img.time}</div>
+            </div>
+        `).join('')
+        : '<div class="no-photos"><i class="fas fa-image"></i><p>暂无照片</p></div>';
+
+    // 创建弹窗
+    const modal = document.createElement('div');
+    modal.className = 'activity-modal-overlay';
+    modal.innerHTML = `
+        <div class="activity-modal">
+            <div class="activity-modal-header">
+                <h2>${activity.name}</h2>
+                <button class="modal-close-btn" onclick="closeActivityModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="activity-modal-body">
+                <!-- 状态标签 -->
+                <div class="activity-status-badge ${statusStyle.class}">
+                    ${statusStyle.text}
+                </div>
+
+                <!-- 基本信息 -->
+                <div class="activity-detail-section">
+                    <div class="detail-item">
+                        <div class="detail-item-label">计划时间</div>
+                        <div class="detail-item-value">${activity.planTime}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">基地/地块</div>
+                        <div class="detail-item-value">${activity.base}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">种植计划</div>
+                        <div class="detail-item-value">${activity.plan}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">负责人</div>
+                        <div class="detail-item-value">${activity.responsible}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">开始时间</div>
+                        <div class="detail-item-value">${activity.startTime}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">结束时间</div>
+                        <div class="detail-item-value">${activity.endTime}</div>
+                    </div>
+                    <div class="detail-item full-width">
+                        <div class="detail-item-label">备注</div>
+                        <div class="detail-item-value">${activity.note}</div>
+                    </div>
+                </div>
+
+                <!-- 来源信息 -->
+                <div class="activity-detail-section">
+                    <div class="detail-item">
+                        <div class="detail-item-label">来源</div>
+                        <div class="detail-item-value">${activity.source}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">创建人</div>
+                        <div class="detail-item-value">${activity.creator}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">创建时间</div>
+                        <div class="detail-item-value">${activity.createTime}</div>
+                    </div>
+                </div>
+
+                <!-- 农事照片 -->
+                <div class="activity-detail-section">
+                    <div class="section-title">
+                        <i class="fas fa-image"></i>
+                        农事照片
+                    </div>
+                    <div class="activity-photos">
+                        ${imagesHtml}
+                    </div>
+                </div>
+
+                <!-- 农事活动描述 -->
+                <div class="activity-detail-section">
+                    <div class="section-title">
+                        <i class="fas fa-align-left"></i>
+                        农事活动描述
+                    </div>
+                    <div class="activity-description">
+                        ${activity.description}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // 添加动画
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
+
+// 关闭农事活动详情弹窗
+function closeActivityModal() {
+    const modal = document.querySelector('.activity-modal-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+// 点击弹窗外部关闭
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('activity-modal-overlay')) {
+        closeActivityModal();
+    }
+});
+
+// ESC键关闭弹窗
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeActivityModal();
+    }
+});
 
 // 添加种植计划卡片
 function addPlantingPlan() {
