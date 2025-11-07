@@ -12,59 +12,370 @@ function hideMobileApp() {
     mobileApp.classList.add('hidden');
 }
 
+// 审批详情数据
+const approvalDetailsData = {
+    'temporary-work-001': {
+        type: '临时用工申请',
+        title: '临时用工申请通知',
+        applicant: '孔双坤',
+        status: '待审核',
+        statusClass: 'pending',
+        description: '柘城基地小麦种植需临时雇佣5名工人进行播种作业，预计工期3天',
+        applyTime: '2025-10-27 14:25',
+        relativeTime: '2小时前',
+        details: {
+            '工作地点': '柘城基地1号地块',
+            '用工人数': '5人',
+            '工作内容': '小麦播种作业',
+            '预计工期': '3天',
+            '开始时间': '2025-10-28 08:00',
+            '结束时间': '2025-10-30 18:00',
+            '工资标准': '200元/天/人',
+            '总预算': '3000元',
+            '联系人': '孔双坤',
+            '联系电话': '138****5678'
+        }
+    },
+    'input-application-001': {
+        type: '投入品申请',
+        title: '投入品申请通知',
+        applicant: '孔双坤',
+        status: '待审核',
+        statusClass: 'pending',
+        description: '申请领用复合肥100袋、尿素50袋，用于柘城基地小麦春季追肥作业',
+        applyTime: '2025-10-27 14:30',
+        relativeTime: '2小时前',
+        details: {
+            '领用地点': '柘城基地仓库',
+            '使用地块': '柘城基地1号地块',
+            '用途说明': '小麦春季追肥作业',
+            '关联种植计划': '柘城基地-小麦种植计划-2025春季',
+            '关联农事活动': '小麦-苗期追肥',
+            '联系人': '孔双坤',
+            '联系电话': '138****5678',
+            '预计使用时间': '2025-11-05'
+        },
+        items: [
+            { name: '复合肥', spec: '50kg/袋，15-15-15', quantity: '100袋', unit: '袋' },
+            { name: '尿素', spec: '50kg/袋，含氮≥46%', quantity: '50袋', unit: '袋' }
+        ]
+    }
+};
+
+// 显示审批详情（点击详情按钮时调用）
+function showApprovalDetail(approvalId) {
+    const detail = approvalDetailsData[approvalId];
+    if (!detail) {
+        alert('未找到审批详情信息');
+        return;
+    }
+    
+    // 创建详情弹窗
+    const modal = document.createElement('div');
+    modal.className = 'approval-detail-modal-overlay';
+    modal.innerHTML = `
+        <div class="approval-detail-modal">
+            <div class="approval-detail-modal-header">
+                <h2>${detail.title}</h2>
+                <button class="modal-close-btn" onclick="closeApprovalDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="approval-detail-modal-body">
+                <!-- 基本信息 -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-info-circle"></i> 基本信息</h3>
+                    <div class="detail-info-grid">
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">申请类型：</span>
+                            <span class="detail-info-value">${detail.type}</span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">申请人：</span>
+                            <span class="detail-info-value">${detail.applicant}</span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">审核状态：</span>
+                            <span class="approval-status-badge ${detail.statusClass}">
+                                <i class="fas fa-clock"></i> ${detail.status}
+                            </span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">申请时间：</span>
+                            <span class="detail-info-value">${detail.applyTime}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 详细描述 -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-align-left"></i> 申请描述</h3>
+                    <div class="detail-description">
+                        ${detail.description}
+                    </div>
+                </div>
+                
+                ${detail.items ? `
+                <!-- 物品清单 -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-list"></i> 物品清单</h3>
+                    <table class="detail-items-table">
+                        <thead>
+                            <tr>
+                                <th>物品名称</th>
+                                <th>规格型号</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${detail.items.map(item => `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.spec}</td>
+                                    <td>${item.quantity}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                ` : ''}
+                
+                <!-- 详细信息 -->
+                <div class="detail-section">
+                    <h3><i class="fas fa-file-alt"></i> 详细信息</h3>
+                    <div class="detail-info-grid">
+                        ${Object.entries(detail.details).map(([key, value]) => `
+                            <div class="detail-info-item">
+                                <span class="detail-info-label">${key}：</span>
+                                <span class="detail-info-value">${value}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="detail-actions">
+                    <button class="btn btn-primary" onclick="approveApplication('${approvalId}')">
+                        <i class="fas fa-check"></i> 同意
+                    </button>
+                    <button class="btn btn-secondary" onclick="rejectApplication('${approvalId}')">
+                        <i class="fas fa-times"></i> 拒绝
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeApprovalDetailModal()">
+                        <i class="fas fa-arrow-left"></i> 返回
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 添加显示动画
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
+
+// 关闭审批详情弹窗
+function closeApprovalDetailModal() {
+    const modal = document.querySelector('.approval-detail-modal-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+// 同意申请
+function approveApplication(approvalId) {
+    if (confirm('确定要同意此申请吗？')) {
+        alert('申请已同意！');
+        closeApprovalDetailModal();
+    }
+}
+
+// 拒绝申请
+function rejectApplication(approvalId) {
+    const reason = prompt('请输入拒绝原因：');
+    if (reason) {
+        alert('申请已拒绝，原因：' + reason);
+        closeApprovalDetailModal();
+    }
+}
+
 function updateMobileContent(type) {
     const approvalList = document.querySelector('.mobile-approval-list');
     
     if (type === 'temporary-work') {
         approvalList.innerHTML = `
+            <!-- 临时用工申请通知 -->
             <div class="mobile-approval-item">
-                <div class="approval-icon">
-                    <i class="fas fa-users"></i>
+                <div class="mobile-approval-item-header">
+                    <div class="approval-icon work-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="approval-item-info">
+                        <div class="approval-item-title">临时用工申请通知</div>
+                        <div class="approval-item-from">孔双坤向你发起了临时用工申请通知</div>
+                    </div>
                 </div>
-                <div class="approval-info">
-                    <div class="approval-title">临时用工申请 (来自云农谷)</div>
-                    <div class="approval-subtitle">申请人：双坤</div>
-                    <div class="approval-time">2025-10-27 14:25</div>
+                <div class="mobile-approval-item-body">
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">审核状态：</div>
+                        <div class="approval-detail-value">
+                            <span class="approval-status-badge pending">
+                                <i class="fas fa-clock"></i> 待审核
+                            </span>
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">描述：</div>
+                        <div class="approval-detail-value approval-desc-text">
+                            柘城基地小麦种植需临时雇佣5名工人进行播种作业，预计工期3天
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">申请时间：</div>
+                        <div class="approval-detail-value">2025-10-27 14:25</div>
+                    </div>
                 </div>
-                <div class="approval-status pending">待处理</div>
+                <div class="mobile-approval-item-footer">
+                    <div class="approval-time">
+                        <i class="far fa-clock"></i>
+                        2小时前
+                    </div>
+                    <div class="approval-detail-btn" onclick="showApprovalDetail('temporary-work-001')">
+                        详情 <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
             
             <div class="mobile-approval-item">
-                <div class="approval-icon">
-                    <i class="fas fa-users"></i>
+                <div class="mobile-approval-item-header">
+                    <div class="approval-icon work-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="approval-item-info">
+                        <div class="approval-item-title">临时用工申请通知</div>
+                        <div class="approval-item-from">孔双坤向你发起了临时用工申请通知</div>
+                    </div>
                 </div>
-                <div class="approval-info">
-                    <div class="approval-title">临时用工申请 (来自云农谷)</div>
-                    <div class="approval-subtitle">申请人：双坤</div>
-                    <div class="approval-time">2025-10-27 13:45</div>
+                <div class="mobile-approval-item-body">
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">审核状态：</div>
+                        <div class="approval-detail-value">
+                            <span class="approval-status-badge pending">
+                                <i class="fas fa-clock"></i> 待审核
+                            </span>
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">描述：</div>
+                        <div class="approval-detail-value approval-desc-text">
+                            柘城基地玉米田除草作业需临时雇佣8名工人，预计工期2天
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">申请时间：</div>
+                        <div class="approval-detail-value">2025-10-27 13:45</div>
+                    </div>
                 </div>
-                <div class="approval-status pending">待处理</div>
+                <div class="mobile-approval-item-footer">
+                    <div class="approval-time">
+                        <i class="far fa-clock"></i>
+                        3小时前
+                    </div>
+                    <div class="approval-detail-btn" onclick="showApprovalDetail('temporary-work-001')">
+                        详情 <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
         `;
     } else if (type === 'input-application') {
         approvalList.innerHTML = `
+            <!-- 投入品申请通知 -->
             <div class="mobile-approval-item">
-                <div class="approval-icon">
-                    <i class="fas fa-seedling"></i>
+                <div class="mobile-approval-item-header">
+                    <div class="approval-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="approval-item-info">
+                        <div class="approval-item-title">投入品申请通知</div>
+                        <div class="approval-item-from">孔双坤向你发起了投入品申请通知</div>
+                    </div>
                 </div>
-                <div class="approval-info">
-                    <div class="approval-title">投入品申请 (来自云农谷)</div>
-                    <div class="approval-subtitle">申请人：双坤</div>
-                    <div class="approval-time">2025-10-27 14:30</div>
+                <div class="mobile-approval-item-body">
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">审核状态：</div>
+                        <div class="approval-detail-value">
+                            <span class="approval-status-badge pending">
+                                <i class="fas fa-clock"></i> 待审核
+                            </span>
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">描述：</div>
+                        <div class="approval-detail-value approval-desc-text">
+                            申请领用复合肥100袋、尿素50袋，用于柘城基地小麦春季追肥作业
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">申请时间：</div>
+                        <div class="approval-detail-value">2025-10-27 14:30</div>
+                    </div>
                 </div>
-                <div class="approval-status pending">待处理</div>
+                <div class="mobile-approval-item-footer">
+                    <div class="approval-time">
+                        <i class="far fa-clock"></i>
+                        2小时前
+                    </div>
+                    <div class="approval-detail-btn" onclick="showApprovalDetail('input-application-001')">
+                        详情 <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
             
             <div class="mobile-approval-item">
-                <div class="approval-icon">
-                    <i class="fas fa-seedling"></i>
+                <div class="mobile-approval-item-header">
+                    <div class="approval-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="approval-item-info">
+                        <div class="approval-item-title">投入品申请通知</div>
+                        <div class="approval-item-from">孔双坤向你发起了投入品申请通知</div>
+                    </div>
                 </div>
-                <div class="approval-info">
-                    <div class="approval-title">投入品申请 (来自云农谷)</div>
-                    <div class="approval-subtitle">申请人：双坤</div>
-                    <div class="approval-time">2025-10-27 12:15</div>
+                <div class="mobile-approval-item-body">
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">审核状态：</div>
+                        <div class="approval-detail-value">
+                            <span class="approval-status-badge pending">
+                                <i class="fas fa-clock"></i> 待审核
+                            </span>
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">描述：</div>
+                        <div class="approval-detail-value approval-desc-text">
+                            申请领用杀虫剂30瓶、除草剂20瓶，用于柘城基地病虫害防治作业
+                        </div>
+                    </div>
+                    <div class="approval-detail-row">
+                        <div class="approval-detail-label">申请时间：</div>
+                        <div class="approval-detail-value">2025-10-27 12:15</div>
+                    </div>
                 </div>
-                <div class="approval-status pending">待处理</div>
+                <div class="mobile-approval-item-footer">
+                    <div class="approval-time">
+                        <i class="far fa-clock"></i>
+                        4小时前
+                    </div>
+                    <div class="approval-detail-btn" onclick="showApprovalDetail('input-application-001')">
+                        详情 <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -784,42 +1095,104 @@ function showWechatApprovalPage() {
                 <p class="page-subtitle">移动端审批管理</p>
             </div>
             
-            <div class="wechat-demo">
-                <div class="demo-phone">
-                    <div class="phone-header">
-                        <div class="phone-title">企业微信</div>
-                        <div class="phone-user">王成龙</div>
-                    </div>
-                    
-                    <div class="phone-content">
-                        <div class="wechat-nav">
-                            <div class="wechat-nav-item active">审批</div>
-                            <div class="wechat-nav-item">消息</div>
+            <div class="wechat-demo-container">
+                <div class="wechat-demo">
+                    <div class="demo-phone">
+                        <div class="phone-header">
+                            <div class="phone-title">企业微信</div>
+                            <div class="phone-user">王成龙</div>
                         </div>
                         
-                        <div class="wechat-approval-list">
-                            <div class="wechat-approval-item">
-                                <div class="approval-icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="approval-info">
-                                    <div class="approval-title">采购申请</div>
-                                    <div class="approval-subtitle">申请人：双坤</div>
-                                    <div class="approval-time">2025-10-27 14:30</div>
-                                </div>
-                                <div class="approval-status pending">待处理</div>
+                        <div class="phone-content">
+                            <div class="wechat-nav">
+                                <div class="wechat-nav-item active">审批</div>
+                                <div class="wechat-nav-item">消息</div>
                             </div>
                             
-                            <div class="wechat-approval-item">
-                                <div class="approval-icon">
-                                    <i class="fas fa-seedling"></i>
+                            <div class="wechat-approval-list">
+                                <!-- 临时用工申请通知 -->
+                                <div class="wechat-approval-item-new">
+                                    <div class="mobile-approval-item-header">
+                                        <div class="approval-icon work-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="approval-item-info">
+                                            <div class="approval-item-title">临时用工申请通知</div>
+                                            <div class="approval-item-from">孔双坤向你发起了临时用工申请通知</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-approval-item-body">
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">审核状态：</div>
+                                            <div class="approval-detail-value">
+                                                <span class="approval-status-badge pending">
+                                                    <i class="fas fa-clock"></i> 待审核
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">描述：</div>
+                                            <div class="approval-detail-value approval-desc-text">
+                                                柘城基地小麦种植需临时雇佣5名工人进行播种作业，预计工期3天
+                                            </div>
+                                        </div>
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">申请时间：</div>
+                                            <div class="approval-detail-value">2025-10-27 14:25</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-approval-item-footer">
+                                        <div class="approval-time">
+                                            <i class="far fa-clock"></i>
+                                            2小时前
+                                        </div>
+                                        <div class="approval-detail-btn" onclick="showApprovalDetail('temporary-work-001')">
+                                            详情 <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="approval-info">
-                                    <div class="approval-title">投入品申请 (来自云农谷)</div>
-                                    <div class="approval-subtitle">申请人：双坤</div>
-                                    <div class="approval-time">2025-10-27 14:25</div>
+                                
+                                <!-- 投入品申请通知 -->
+                                <div class="wechat-approval-item-new">
+                                    <div class="mobile-approval-item-header">
+                                        <div class="approval-icon">
+                                            <i class="fas fa-seedling"></i>
+                                        </div>
+                                        <div class="approval-item-info">
+                                            <div class="approval-item-title">投入品申请通知</div>
+                                            <div class="approval-item-from">孔双坤向你发起了投入品申请通知</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-approval-item-body">
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">审核状态：</div>
+                                            <div class="approval-detail-value">
+                                                <span class="approval-status-badge pending">
+                                                    <i class="fas fa-clock"></i> 待审核
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">描述：</div>
+                                            <div class="approval-detail-value approval-desc-text">
+                                                申请领用复合肥100袋、尿素50袋，用于柘城基地小麦春季追肥作业
+                                            </div>
+                                        </div>
+                                        <div class="approval-detail-row">
+                                            <div class="approval-detail-label">申请时间：</div>
+                                            <div class="approval-detail-value">2025-10-27 14:30</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-approval-item-footer">
+                                        <div class="approval-time">
+                                            <i class="far fa-clock"></i>
+                                            2小时前
+                                        </div>
+                                        <div class="approval-detail-btn" onclick="showApprovalDetail('input-application-001')">
+                                            详情 <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="approval-status pending">待处理</div>
                             </div>
                         </div>
                     </div>

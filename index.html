@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数智平台与云农谷业务互通原型演示</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20250130">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -306,9 +306,9 @@
             <div class="phone-frame">
                 <div class="phone-screen">
                     <div class="mobile-header">
-                        <div class="mobile-title">数智平台</div>
+                        <div class="mobile-title">企业微信</div>
                         <div class="mobile-user">
-                            <img src="https://via.placeholder.com/24x24/4A90E2/FFFFFF?text=王" alt="用户头像">
+                            <img src="https://via.placeholder.com/28x28/07c160/FFFFFF?text=王" alt="用户头像">
                             <span>王成龙</span>
                         </div>
                     </div>
@@ -317,32 +317,91 @@
                         <div class="mobile-nav">
                             <div class="mobile-nav-item active">审批</div>
                             <div class="mobile-nav-item">消息</div>
-                            <div class="mobile-nav-item">我的</div>
                         </div>
                         
                         <div class="mobile-approval-list">
+                            <!-- 临时用工申请通知 -->
                             <div class="mobile-approval-item">
-                                <div class="approval-icon">
-                                    <i class="fas fa-file-alt"></i>
+                                <div class="mobile-approval-item-header">
+                                    <div class="approval-icon work-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="approval-item-info">
+                                        <div class="approval-item-title">临时用工申请通知</div>
+                                        <div class="approval-item-from">孔双坤向你发起了临时用工申请通知</div>
+                                    </div>
                                 </div>
-                                <div class="approval-info">
-                                    <div class="approval-title">投入品申请 (来自云农谷)</div>
-                                    <div class="approval-subtitle">申请人：双坤</div>
-                                    <div class="approval-time">2025-10-27 14:30</div>
+                                <div class="mobile-approval-item-body">
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">审核状态：</div>
+                                        <div class="approval-detail-value">
+                                            <span class="approval-status-badge pending">
+                                                <i class="fas fa-clock"></i> 待审核
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">描述：</div>
+                                        <div class="approval-detail-value approval-desc-text">
+                                            柘城基地小麦种植需临时雇佣5名工人进行播种作业，预计工期3天
+                                        </div>
+                                    </div>
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">申请时间：</div>
+                                        <div class="approval-detail-value">2025-10-27 14:25</div>
+                                    </div>
                                 </div>
-                                <div class="approval-status pending">待处理</div>
+                                <div class="mobile-approval-item-footer">
+                                    <div class="approval-time">
+                                        <i class="far fa-clock"></i>
+                                        2小时前
+                                    </div>
+                                    <div class="approval-detail-btn" onclick="showApprovalDetail('temporary-work-001')">
+                                        详情 <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
                             </div>
                             
+                            <!-- 投入品申请通知 -->
                             <div class="mobile-approval-item">
-                                <div class="approval-icon">
-                                    <i class="fas fa-users"></i>
+                                <div class="mobile-approval-item-header">
+                                    <div class="approval-icon">
+                                        <i class="fas fa-seedling"></i>
+                                    </div>
+                                    <div class="approval-item-info">
+                                        <div class="approval-item-title">投入品申请通知</div>
+                                        <div class="approval-item-from">孔双坤向你发起了投入品申请通知</div>
+                                    </div>
                                 </div>
-                                <div class="approval-info">
-                                    <div class="approval-title">临时用工申请 (来自云农谷)</div>
-                                    <div class="approval-subtitle">申请人：双坤</div>
-                                    <div class="approval-time">2025-10-27 14:25</div>
+                                <div class="mobile-approval-item-body">
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">审核状态：</div>
+                                        <div class="approval-detail-value">
+                                            <span class="approval-status-badge pending">
+                                                <i class="fas fa-clock"></i> 待审核
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">描述：</div>
+                                        <div class="approval-detail-value approval-desc-text">
+                                            申请领用复合肥100袋、尿素50袋，用于柘城基地小麦春季追肥作业
+                                        </div>
+                                    </div>
+                                    <div class="approval-detail-row">
+                                        <div class="approval-detail-label">申请时间：</div>
+                                        <div class="approval-detail-value">2025-10-27 14:30</div>
+                                    </div>
                                 </div>
-                                <div class="approval-status pending">待处理</div>
+                                <div class="mobile-approval-item-footer">
+                                    <div class="approval-time">
+                                        <i class="far fa-clock"></i>
+                                        2小时前
+                                    </div>
+                                    <div class="approval-detail-btn" onclick="showApprovalDetail('input-application-001')">
+                                        详情 <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -356,5 +415,22 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // 检查样式是否正确加载
+        window.addEventListener('load', function() {
+            const phoneFrame = document.querySelector('.phone-frame');
+            if (phoneFrame) {
+                const styles = window.getComputedStyle(phoneFrame);
+                const width = styles.width;
+                const height = styles.height;
+                console.log('手机壳尺寸:', width, 'x', height);
+                if (width === '420px' && height === '840px') {
+                    console.log('✅ 样式已正确加载！');
+                } else {
+                    console.warn('⚠️ 样式可能未正确加载，当前尺寸:', width, 'x', height);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
